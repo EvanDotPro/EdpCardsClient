@@ -9,8 +9,6 @@ use Zend\Stdlib\Hydrator\ClassMethods;
 
 abstract class AbstractRestMapper implements SM\ServiceLocatorAwareInterface
 {
-    use SM\ServiceLocatorAwareTrait;
-
     /**
      * @var HttpClient
      */
@@ -25,6 +23,12 @@ abstract class AbstractRestMapper implements SM\ServiceLocatorAwareInterface
      * @var string
      */
     protected $baseUri;
+
+    /**
+     * @var SM\ServiceLocatorInterface
+     */
+    protected $serviceLocator = null;
+
 
     public function __construct($baseUri)
     {
@@ -95,5 +99,28 @@ abstract class AbstractRestMapper implements SM\ServiceLocatorAwareInterface
     {
         $this->hydrator = $hydrator;
         return $this;
+    }
+
+    /**
+     * Set service locator
+     *
+     * @param SM\ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function setServiceLocator(SM\ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return SM\ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
     }
 }

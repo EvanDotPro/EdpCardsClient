@@ -6,30 +6,39 @@ use Zend\EventManager as EM;
 
 use EdpCards\Entity;
 
-class Game implements SM\ServiceLocatorAwareInterface {
-    use SM\ServiceLocatorAwareTrait;
-
+class Game implements SM\ServiceLocatorAwareInterface
+{
     protected $gameMapper;
 
-    public function getList() {
+    /**
+     * @var SM\ServiceLocatorInterface
+     */
+    protected $serviceLocator = null;
+
+    public function getList()
+    {
         return $this->getGameMapper()->getList();
     }
 
-    public function get($id) {
+    public function get($id)
+    {
         $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
 
         return $this->getGameMapper()->get($id);
     }
 
-    public function create(Entity\Game $game, Entity\Player $player) {
+    public function create(Entity\Game $game, Entity\Player $player)
+    {
         return $this->getGameMapper()->create($game, $player);
     }
 
-    public function update(Entity\Game $game) {
+    public function update(Entity\Game $game)
+    {
         return $this->getGameMapper()->update($game);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
 
         return $this->getGameMapper()->delete($id);
@@ -51,7 +60,8 @@ class Game implements SM\ServiceLocatorAwareInterface {
         return $this->getGameMapper()->getPlayerCards($gameId, $playerId);
     }
 
-    public function getDecks() {
+    public function getDecks()
+    {
         $decks = $this->getGameMapper()->getDecks();
         if (!$decks) {
             return false;
@@ -66,15 +76,40 @@ class Game implements SM\ServiceLocatorAwareInterface {
         return $decks;
     }
 
-    public function getGameMapper() {
-        if(!$this->gameMapper) {
+    public function getGameMapper()
+    {
+        if (!$this->gameMapper) {
             $this->gameMapper = $this->getServiceLocator()->get('edpcardsclient_gamemapper');
         }
 
         return $this->gameMapper;
     }
 
-    public function setGameMapper($gameMapper) {
+    public function setGameMapper($gameMapper)
+    {
         $this->gameMapper = $gameMapper;
+    }
+
+    /**
+     * Set service locator
+     *
+     * @param SM\ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function setServiceLocator(SM\ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return SM\ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
     }
 }
