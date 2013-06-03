@@ -1,0 +1,49 @@
+.navbar .logged-in {
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.navbar .logged-in img,
+.player-list img
+{
+    border-radius: 20px;
+}
+
+th.points-column {
+    width: 40px;
+}
+
+.answer-placeholder {
+    margin-left: 75px;
+}
+
+li.card {
+    list-style-type: none;
+}
+
+.card > .card {
+    font-size: 1em;
+    margin: -0.714285714em;
+}
+
+.card {
+    margin: 0.714285714em;
+    height: 12em;
+    width: 12em;
+    box-shadow: 0 0 0.285714286em 0.107142857em #888;
+    border-radius: 0.285714286em;
+    padding: 0.7em;
+    font-weight: bold;
+    font-family: sans;
+    line-height: 1.5em;
+    background-color: #FFF;
+}
+
+.card-small {
+    font-size: 0.75em;
+}
+
+.card-black {
+    background-color: #000;
+    color: #FFF;
+}

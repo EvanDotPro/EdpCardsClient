@@ -1,0 +1,32 @@
+
+<?php if (count($games) > 0): ?>
+    <table class="table table-striped game-list">
+        <thead>
+            <tr>
+                <th>Game Name</th>
+                <th>Players</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach($games as $game): ?>
+            <tr>
+                <td class="game-name">
+                    <a href="<?php echo $this->url('games/game', array('game_id' => $game->id)); ?>"><?php echo $game->name; ?></a>
+                </td>
+                <td class="player-count"><?php echo $game->playerCount; ?></td>
+                <td class="game-players">
+                    <?php foreach($game->players as $player): ?>
+                        <?php echo $this->gravatar($player->emailHash, array('img_size' => 20)); ?>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <div class="game-list no-games">
+        No games in progress
+    </div>
+<?php endif; ?>
+

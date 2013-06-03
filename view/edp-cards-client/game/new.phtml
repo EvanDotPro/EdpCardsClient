@@ -1,0 +1,8 @@
+<?php if ($this->cards()->getPlayer()): ?>
+    <?php $createGameForm->prepare()->setAttributes(array('method' => 'post', 'action' => $this->url('games/create'))); ?>
+    <?php echo $this->form()->openTag($createGameForm); ?>
+        <?php foreach ($createGameForm as $field): ?>
+            <?php echo $this->formRow($field); ?>
+        <?php endforeach; ?>
+    <?php echo $this->form()->closeTag(); ?>
+<?php endif; ?>
