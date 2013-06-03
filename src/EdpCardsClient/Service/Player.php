@@ -2,16 +2,18 @@
 namespace EdpCardsClient\Service;
 
 use Zend\ServiceManager as SM;
-use Zend\EventManager as EM;
 
 use EdpCards\Entity;
 
 class Player implements SM\ServiceLocatorAwareInterface
 {
-    use SM\ServiceLocatorAwareTrait;
-
     protected $playerMapper;
     protected $sessionPlayer;
+
+    /**
+     * @var SM\ServiceLocatorInterface
+     */
+    protected $serviceLocator = null;
 
     public function getSessionPlayer()
     {
@@ -52,21 +54,47 @@ class Player implements SM\ServiceLocatorAwareInterface
         return $this->getPlayerMapper()->update($player);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
-        
+
         return $this->getPlayerMapper()->delete($id);
     }
-    
-    public function getPlayerMapper() {
-        if(!$this->playerMapper) {
+
+    public function getPlayerMapper()
+    {
+        if (!$this->playerMapper) {
             $this->playerMapper = $this->getServiceLocator()->get('edpcardsclient_playermapper');
         }
-        
+
         return $this->playerMapper;
     }
-    
-    public function setPlayerMapper($playerMapper) {
+
+    public function setPlayerMapper($playerMapper)
+    {
         $this->playerMapper = $playerMapper;
+    }
+
+    /**
+     * Set service locator
+     *
+     * @param SM\ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function setServiceLocator(SM\ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return SM\ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
     }
 }
