@@ -26,6 +26,7 @@
             </div>
 
             <div class="span7">
+                <?php if ($this->cards()->getPlayer()): ?>
                 <div class="row-fluid">
                     <div class="span7">
                     <?php for($i=0; $i<$blackCard->blankCount; $i++): ?>
@@ -43,6 +44,7 @@
                         </form>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

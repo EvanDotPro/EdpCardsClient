@@ -1,6 +1,12 @@
-<div class="alert alert-info clearfix">
-    <strong>You are viewing the permalink for a round!</strong> <a href="<?php echo $this->url('games/game', array(), true); ?>">Click here</a> to watch the game live.
-</div>
+<?php if ($newRound): ?>
+    <div class="alert alert-success clearfix">
+        <strong>A new round has started!</strong> <a href="<?php echo $this->url('games/game', array(), true); ?>">Click here</a> to join in!
+    </div>
+<?php else: ?>
+    <div class="alert alert-info clearfix">
+        <strong>Sit tight!</strong> The next round will begin shortly.
+    </div>
+<?php endif; ?>
 
 <div class="row-fluid">
     <div class="span2">
@@ -29,3 +35,6 @@
         <?php endforeach; ?>
     </div>
 </div>
+<script>
+setTimeout(function() { $('#content').load('<?php echo $this->url('games/game/round', array(), true); ?>?ajax=true'); }, 1500);
+</script>

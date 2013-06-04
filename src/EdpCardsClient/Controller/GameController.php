@@ -54,6 +54,16 @@ class GameController extends AbstractActionController
         $view->blackCard = $round['black_card'];
         $view->players = $round['players'];
 
+        $latestRound = $this->getGameService()->getRoundInfo($this->params('game_id'));
+        if ($round['round_id'] < $latestRound['round_id']) {
+            $view->newRound = true;
+        } else {
+            $view->newRound = false;
+        }
+        if ($this->params()->fromQuery('ajax')) {
+            $view->setTerminal(true);
+        }
+
         return $view;
     }
 
@@ -98,7 +108,7 @@ class GameController extends AbstractActionController
         $data = $this->params()->fromPost();
         $player = $this->getPlayerService()->getSessionPlayer();
         $test = $this->getGameService()->submitAnswers($this->params('game_id'), $data['round_id'], $player->id, $data['cards']);
-        return $this->redirect()->toRoute('games/game', array('game_id' => $this->params('game_id')));
+        return $this->redirect()->toRoute('games/game/round', array('game_id' => $this->params('game_id'), 'round_id' => $data['round_id']));
     }
 
     public function newAction()
