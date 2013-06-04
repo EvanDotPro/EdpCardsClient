@@ -1,3 +1,8 @@
+<?php if (!$this->cards()->getPlayer()): ?>
+    <div class="alert alert-info clearfix">
+        <strong>Hey lurker!</strong> You are currently just spectating. Sign in above to join the fun!
+    </div>
+<?php endif; ?>
 <?php if ($newRound): ?>
     <div class="alert alert-success clearfix">
         <strong>A new round has started!</strong> <a href="<?php echo $this->url('games/game', array(), true); ?>">Click here</a> to join in!

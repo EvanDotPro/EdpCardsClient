@@ -1,16 +1,10 @@
 <?php $this->headScript()->appendFile($this->basePath() . '/js/jquery-ui.min.js', 'text/javascript'); ?>
-<?php if (!$this->cards()->getPlayer()): ?>
-    <div class="alert alert-info clearfix">
-        <strong>Hey lurker!</strong> You are currently just spectating. Sign in above to join the fun!
-    </div>
-<?php elseif (!$this->cards()->isInGame($game)): ?>
+<?php if (!$this->cards()->isInGame($game)): ?>
     <div class="alert alert-info clearfix">
         <strong>Hey <?php echo $this->cards()->getPlayer()->displayName; ?>!</strong> You haven't joined this game yet!
         <a class="btn btn-inverse" href="<?php echo $this->url('games/game/join', array('game_id' => $game->id)); ?>">Join Game</a>
     </div>
 <?php endif; ?>
-
-<span class="pull-right"><a href="<?php echo $this->url('games/game/round', array('round_id' => $roundId), true); ?>">Share this round!</a></span>
 
 <div class="row-fluid">
     <div class="span10">
