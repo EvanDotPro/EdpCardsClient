@@ -27,14 +27,18 @@
                 <div class="row-fluid">
                     <div class="span7">
                     <?php for($i=0; $i<$blackCard->blankCount; $i++): ?>
-                        <div class="cards card card-small pull-left ui-state-disabled">
+                        <div class="card-target cards card card-small pull-left ui-state-disabled">
                         </div>
                     <?php endfor; ?>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span7">
-                        <a href="#" class="btn btn-large btn-inverse">Submit Answer</a>
+                        <form method="POST" action="<?php echo $this->url('games/game/submit', array('game_id' => $game->id)); ?>">
+                            <input type="hidden" name="round_id" value="<?php echo $roundId; ?>">
+                            <div id="cardfields"></div>
+                            <button type="submit" class="btn btn-large btn-inverse" id="submit-answers">Submit Answer</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -74,8 +78,8 @@
 
         <div class="span12 cards">
             <?php foreach ($cards as $card): ?>
-                <div class="card card-small pull-left">
-                <?php echo  $card->text; ?>
+                <div class="card card-small pull-left" data-card-id="<?php echo $card->id; ?>">
+                <?php echo $card->text; ?>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -86,6 +90,21 @@
 $(function() {
     $( "div.cards" ).sortable({
         connectWith: 'div.cards',
+        remove: function(event, ui) {
+            $('#cardfields').html('');
+            displayButton = true;
+            $('.card-target').each(function(i, el) {
+                if (null == $(el).find('.card').data('card-id')) {
+                    displayButton = false;
+                }
+                $('#cardfields').append('<input type="hidden" name="cards[]" value="' + $(el).find('.card').data('card-id') + '">');
+            });
+            if (displayButton) {
+                $('#submit-answers').show();
+            } else {
+                $('#submit-answers').hide();
+            }
+        },
         items: "div:not(.ui-state-disabled)"
     }).disableSelection();
 });

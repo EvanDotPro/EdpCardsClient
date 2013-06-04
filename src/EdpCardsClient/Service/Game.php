@@ -49,6 +49,11 @@ class Game implements SM\ServiceLocatorAwareInterface
         return $this->getGameMapper()->joinGame($gameId, $playerId);
     }
 
+    public function submitAnswers($gameId, $roundId, $playerId, $cardIds)
+    {
+        return $this->getGameMapper()->submitAnswers($gameId, $roundId, $playerId, $cardIds);
+    }
+
     public function getRoundInfo($gameId, $roundId = null)
     {
         $round = $this->getGameMapper()->getRoundInfo($gameId, $roundId);

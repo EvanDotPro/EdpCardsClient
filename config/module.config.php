@@ -60,6 +60,15 @@ return array(
                                     ),
                                 ),
                             ),
+                            'submit' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route'  => '/submit',
+                                    'defaults' => array(
+                                        'action' => 'submit',
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                     'new' => array(

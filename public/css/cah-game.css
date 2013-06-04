@@ -17,6 +17,14 @@ th.points-column {
     margin-left: 75px;
 }
 
+#submit-answers {
+    display: none;
+}
+
+.card-target {
+    background-image: url(/images/drop.png);
+}
+
 li.card {
     list-style-type: none;
 }

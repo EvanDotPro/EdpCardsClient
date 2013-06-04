@@ -63,6 +63,16 @@ class Game extends AbstractRestMapper
         return $game;
     }
 
+    public function submitAnswers($gameId, $roundId, $playerId, $cardIds)
+    {
+        $data = array(
+            'player_id' => $playerId,
+            'card_ids'  => $cardIds,
+        );
+        $result = $this->request(sprintf('/games/%d/rounds/%d', $gameId, $roundId), 'PUT', $data);
+        return $result;
+    }
+
     public function getRoundInfo($gameId, $roundId = null)
     {
         $roundId = $roundId ?: 'latest';

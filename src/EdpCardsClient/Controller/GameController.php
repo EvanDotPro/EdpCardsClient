@@ -42,6 +42,7 @@ class GameController extends AbstractActionController
 
         $round = $this->getGameService()->getRoundInfo($game->id);
         $view->blackCard = $round['black_card'];
+        $view->roundId   = $round['round_id'];
 
         return $view;
     }
@@ -80,6 +81,14 @@ class GameController extends AbstractActionController
         $gameId = $this->params('game_id');
         $this->getGameService()->joinGame($gameId, $player->id);
         return $this->redirect()->toRoute('games/game', array('game_id' => $gameId));
+    }
+
+    public function submitAction()
+    {
+        $data = $this->params()->fromPost();
+        $player = $this->getPlayerService()->getSessionPlayer();
+        $test = $this->getGameService()->submitAnswers($this->params('game_id'), $data['round_id'], $player->id, $data['cards']);
+        return $this->redirect()->toRoute('games/game', array('game_id' => $this->params('game_id')));
     }
 
     public function newAction()
