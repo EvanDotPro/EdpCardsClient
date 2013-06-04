@@ -43,6 +43,12 @@ class GameController extends AbstractActionController
         $round = $this->getGameService()->getRoundInfo($game->id);
         $view->blackCard = $round['black_card'];
         $view->roundId   = $round['round_id'];
+        foreach ($round['players'] as $donePlayer) {
+            if ($player->id == $donePlayer->id) {
+                return $this->redirect()->toRoute('games/game/round', array('game_id' => $game->id, 'round_id' => $round['round_id']));
+            }
+        }
+
 
         return $view;
     }
