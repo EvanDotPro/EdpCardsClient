@@ -3,6 +3,7 @@ namespace EdpCardsClient\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 use Zend\Stdlib\Hydrator;
 
 use Application\Form;
@@ -14,6 +15,7 @@ class GameController extends AbstractActionController
     protected $createGameForm;
     protected $playerService;
     protected $gameService;
+    protected $hydrator;
 
     public function indexAction()
     {
@@ -35,17 +37,22 @@ class GameController extends AbstractActionController
         $view = new ViewModel;
         $view->game = $game;
 
-        $player = $this->getPlayerService()->getSessionPlayer();
-        if ($player) {
-            $view->cards = $this->getGameService()->getPlayerCards($game->id, $player->id);
-        }
-
         $round = $this->getGameService()->getRoundInfo($game->id);
         $view->blackCard = $round['black_card'];
         $view->roundId   = $round['round_id'];
-        if (!$player) {
+
+        $player = $this->getPlayerService()->getSessionPlayer();
+        $inGame = false;
+        if ($player) {
+            foreach ($game->players as $thisPlayer) {
+                if ($player->id == $thisPlayer->id) $inGame = true;
+            }
+        }
+        if (!$inGame || !$player) {
             return $this->redirect()->toRoute('games/game/round', array('game_id' => $game->id, 'round_id' => $round['round_id']));
         }
+
+        $view->cards = $this->getGameService()->getPlayerCards($game->id, $player->id);
 
         foreach ($round['players'] as $donePlayer) {
             if ($player->id == $donePlayer->id) {
@@ -56,24 +63,36 @@ class GameController extends AbstractActionController
         return $view;
     }
 
-    public function roundAction()
+    protected function getRoundInfoViewModel($json = false)
     {
+        $game  = $this->getGameservice()->get($this->params('game_id'));
         $round = $this->getGameService()->getRoundInfo($this->params('game_id'), $this->params('round_id'));
-        $view = new ViewModel;
-        $view->blackCard = $round['black_card'];
-        $view->players = $round['players'];
-
         $latestRound = $this->getGameService()->getRoundInfo($this->params('game_id'));
+        $view = array();
+        $view['blackCard'] = $round['black_card'];
+        $view['players'] = $round['players'];
+        $view['game'] = $game;
         if ($round['round_id'] < $latestRound['round_id']) {
-            $view->newRound = true;
+            $view['newRound'] = true;
         } else {
-            $view->newRound = false;
+            $view['newRound'] = false;
+        }
+
+        if ($json || $this->params()->fromQuery('json')) {
+            $view = new JsonModel($this->toArray($view));
+        } else {
+            $view = new ViewModel($view);
         }
         if ($this->params()->fromQuery('ajax')) {
             $view->setTerminal(true);
         }
 
         return $view;
+    }
+
+    public function roundAction()
+    {
+        return $this->getRoundInfoViewModel();
     }
 
     public function logoutAction()
@@ -184,5 +203,28 @@ class GameController extends AbstractActionController
         }
 
         return $this->createGameForm;
+    }
+
+    protected function toArray($value)
+    {
+        if (is_array($value) or $value instanceof \Traversable) {
+            $return = array();
+            foreach ($value as $key => $item) {
+                $return[$key] = $this->toArray($item);
+            }
+            return $return;
+        } else if (is_object($value)) {
+            return $this->toArray($this->getHydrator()->extract($value));
+        }
+        return $value;
+    }
+
+    protected function getHydrator()
+    {
+        if (!$this->hydrator) {
+            $this->hydrator = new Hydrator\ClassMethods;
+        }
+
+        return $this->hydrator;
     }
 }

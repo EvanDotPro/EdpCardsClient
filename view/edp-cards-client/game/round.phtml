@@ -2,10 +2,19 @@
     <div class="alert alert-info clearfix">
         <strong>Hey lurker!</strong> You are currently just spectating. Sign in above to join the fun!
     </div>
+<?php else: ?>
+    <?php if (!$this->cards()->isInGame($game)): ?>
+        <div class="alert alert-info clearfix">
+            <strong>Hey <?php echo $this->cards()->getPlayer()->displayName; ?>!</strong> You haven't joined this game yet!
+            <a class="btn btn-inverse" href="<?php echo $this->url('games/game/join', array('game_id' => $game->id)); ?>">Join Game</a>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
+
 <?php if ($newRound): ?>
+    <meta http-equiv="refresh" content="4; url=<?php echo $this->url('games/game', array(), true); ?>">
     <div class="alert alert-success clearfix">
-        <strong>A new round has started!</strong> <a href="<?php echo $this->url('games/game', array(), true); ?>">Click here</a> to join in!
+        <strong>A new round is starting!</strong> You'll be redirected.
     </div>
 <?php else: ?>
     <div class="alert alert-info clearfix">
@@ -41,5 +50,9 @@
     </div>
 </div>
 <script>
+<?php if (!$newRound): ?>
 setTimeout(function() { $('#content').load('<?php echo $this->url('games/game/round', array(), true); ?>?ajax=true'); }, 1500);
+<?php else: ?>
+setTimeout(function() { window.location = '<?php echo $this->url('games/game', array(), true); ?>'; }, 1500);
+<?php endif; ?>
 </script>

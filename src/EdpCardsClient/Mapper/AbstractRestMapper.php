@@ -58,7 +58,6 @@ abstract class AbstractRestMapper implements SM\ServiceLocatorAwareInterface
             return Json::decode($response->getBody(), true);
         } catch (\Exception $e) {
             echo $response->getBody();
-            die();
         }
     }
 
