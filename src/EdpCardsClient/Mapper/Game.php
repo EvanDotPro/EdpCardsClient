@@ -78,6 +78,15 @@ class Game extends AbstractRestMapper
         $roundId = $roundId ?: 'latest';
         $round = $this->request(sprintf('/games/%d/rounds/%s', $gameId, $roundId));
         $round['black_card'] = $this->getHydrator()->hydrate($round['black_card'], new Entity\Card);
+        foreach ($round['players'] as $i => $player) {
+            $player = $this->getHydrator()->hydrate($player, new Entity\Player);
+            $cards = array();
+            foreach ($player->cards as $card) {
+                $cards[] = $this->getHydrator()->hydrate($card, new Entity\Card);
+            }
+            $player->setCards($cards);
+            $round['players'][$i] = $player;
+        }
 
         return $round;
     }

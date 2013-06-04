@@ -1,0 +1,31 @@
+<div class="alert alert-info clearfix">
+    <strong>You are viewing the permalink for a round!</strong> <a href="<?php echo $this->url('games/game', array(), true); ?>">Click here</a> to watch the game live.
+</div>
+
+<div class="row-fluid">
+    <div class="span2">
+        <div class="card card-black">
+            <?php echo $blackCard->text; ?>
+        </div>
+    </div>
+    <div class="span10">
+        <?php foreach ($players as $player): ?>
+        <div class="row">
+
+            <div class="span<?php echo count($player->cards) + 1;?>">
+                <?php foreach ($player->cards as $card): ?>
+                    <div class="card card-small pull-left">
+                    <?php echo $card->text; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="span1">
+                <?php echo $this->gravatar($player->emailHash); ?><br/>
+                <?php echo $player->displayName; ?>
+            </div>
+
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>

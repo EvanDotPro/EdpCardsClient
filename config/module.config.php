@@ -69,6 +69,18 @@ return array(
                                     ),
                                 ),
                             ),
+                            'round' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route'  => '/:round_id',
+                                    'constraints' => array(
+                                        'round_id' => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'round',
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                     'new' => array(

@@ -47,6 +47,16 @@ class GameController extends AbstractActionController
         return $view;
     }
 
+    public function roundAction()
+    {
+        $round = $this->getGameService()->getRoundInfo($this->params('game_id'), $this->params('round_id'));
+        $view = new ViewModel;
+        $view->blackCard = $round['black_card'];
+        $view->players = $round['players'];
+
+        return $view;
+    }
+
     public function logoutAction()
     {
         $session = $this->serviceLocator->get('session');
